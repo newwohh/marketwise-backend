@@ -22,6 +22,5 @@ mongoose
 const app = express();
 
 app.use(cors());
-app.get("/test", (req, res, next) => {});
 
 module.exports = app;
