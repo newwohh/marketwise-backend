@@ -44,7 +44,7 @@ mongoose
   })
   .then(() => console.log("DB SUCCESS"));
 
-app.use("/", userRouter);
+app.use("/api/v1/users/", userRouter);
 
 app.get("/setcookie", (req, res) => {
   res.cookie(`Cookie token name`, `encrypted cookie string Value`, {
