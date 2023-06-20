@@ -27,6 +27,7 @@ app.use(function (req, res, next) {
     "Access-Control-Allow-Headers",
     "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept"
   );
+
   next();
 });
 
@@ -34,6 +35,7 @@ const DB = process.env.DATABASE.replace(
   "<PASSWORD>",
   process.env.DATABASE_PASSWORD
 );
+app.use("/api/v1/users/", userRouter);
 
 mongoose
   .connect(DB, {
@@ -43,19 +45,5 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => console.log("DB SUCCESS"));
-
-app.use("/api/v1/users/", userRouter);
-
-app.get("/setcookie", (req, res) => {
-  res.cookie(`Cookie token name`, `encrypted cookie string Value`, {
-    expires: new Date(
-      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
-    ),
-    httpOnly: true,
-    secure: true,
-    sameSite: "none",
-  });
-  res.send("Cookie have been saved successfully");
-});
 
 module.exports = app;

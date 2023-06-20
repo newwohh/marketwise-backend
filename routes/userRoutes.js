@@ -5,6 +5,9 @@ const userRouter = express.Router();
 
 userRouter.post("/signup", authController.signup);
 userRouter.post("/login", authController.login);
-userRouter.get("/islog", authController.isLoggedIn);
+
+userRouter.use(authController.protect);
+
+userRouter.get("/heatmap", authController.heatmap);
 
 module.exports = userRouter;

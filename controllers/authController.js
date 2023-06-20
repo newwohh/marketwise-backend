@@ -49,19 +49,27 @@ exports.login = catchAsync(async (req, res, next) => {
   createSendToken(user, 200, req, res);
 });
 
-exports.isLoggedIn = async (req, res, next) => {
+exports.protect = async (req, res, next) => {
   if (req.cookies.jwt) {
-    const decoded = await promisify(jwt.verify)(
-      req.cookies.jwt,
-      process.env.JWT_SECRET
-    );
-    console.log(decoded);
-    const freshUser = await User.findById(decoded.id);
-    res.status(200).json({
-      status: "success",
-      data: freshUser,
-    });
-    return next();
+    try {
+      const decoded = await promisify(jwt.verify)(
+        req.cookies.jwt,
+        process.env.JWT_SECRET
+      );
+
+      const currentUser = await User.findById(decoded.id);
+
+      console.log(currentUser.name);
+      res.locals.user = currentUser;
+      return next();
+    } catch (err) {
+      return console.log(err);
+    }
+  } else {
+    res.send({ status: "failed" });
   }
-  next();
+};
+
+exports.heatmap = async (req, res, next) => {
+  res.send({ status: "success" });
 };
