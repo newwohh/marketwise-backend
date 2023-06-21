@@ -60,6 +60,7 @@ exports.protect = async (req, res, next) => {
       const currentUser = await User.findById(decoded.id);
 
       console.log(currentUser.name);
+      req.user = currentUser;
       res.locals.user = currentUser;
       return next();
     } catch (err) {
@@ -71,5 +72,7 @@ exports.protect = async (req, res, next) => {
 };
 
 exports.heatmap = async (req, res, next) => {
+  const { user } = req;
+  console.log(user.name);
   res.send({ status: "success" });
 };
