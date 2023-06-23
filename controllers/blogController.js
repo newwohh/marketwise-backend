@@ -24,4 +24,6 @@ exports.getAllBlogs = catchAsync(async (req, res, next) => {
     status: "success",
     data: allBlogs,
   });
+
+  next();
 });

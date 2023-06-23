@@ -16,25 +16,24 @@ app.use(mongoSanitize());
 // data sanitization against cross side scripting
 app.use(xss());
 
-// Routes
-app.use("/api/v1/users/", userRouter);
-app.use("/api/v1/blogs/", blogRouter);
-
 // Cross side scripting middleware
 app.use(function (req, res, next) {
-  console.log(req.cookies.jwt);
   res.header("Access-Control-Allow-Credentials", true);
   res.header("Access-Control-Allow-Origin", req.headers.origin);
-  res.header(
-    "Access-Control-Allow-Methods",
-    "GET,PUT,POST,DELETE,UPDATE,OPTIONS"
-  );
   res.header(
     "Access-Control-Allow-Headers",
     "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept"
   );
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET,PUT,POST,DELETE,UPDATE,OPTIONS"
+  );
 
   next();
 });
+
+// Routes
+app.use("/api/v1/users/", userRouter);
+app.use("/api/v1/blogs/", blogRouter);
 
 module.exports = app;
