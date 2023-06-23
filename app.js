@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 const xss = require("xss-clean");
 const mongoSanitize = require("express-mongo-sanitize");
 const userRouter = require("./routes/userRoutes");
+const blogRouter = require("./routes/blogRoutes");
 const app = express();
 app.use(cookieParser());
 dotenv.config({ path: "./config/config.env" });
@@ -17,6 +18,7 @@ app.use(mongoSanitize());
 app.use(xss());
 
 app.use(function (req, res, next) {
+  console.log(req.cookies.jwt);
   res.header("Access-Control-Allow-Credentials", true);
   res.header("Access-Control-Allow-Origin", req.headers.origin);
   res.header(
@@ -36,6 +38,7 @@ const DB = process.env.DATABASE.replace(
   process.env.DATABASE_PASSWORD
 );
 app.use("/api/v1/users/", userRouter);
+app.use("/api/v1/blogs/", blogRouter);
 
 mongoose
   .connect(DB, {

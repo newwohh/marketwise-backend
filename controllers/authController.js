@@ -37,7 +37,6 @@ exports.signup = catchAsync(async (req, res, next) => {
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
   });
-
   createSendToken(newUser, 201, req, res);
 });
 
@@ -45,7 +44,6 @@ exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email }).select("+password");
   await user.correctPassword(password, user.password);
-  console.log(user);
   createSendToken(user, 200, req, res);
 });
 
@@ -56,9 +54,7 @@ exports.protect = async (req, res, next) => {
         req.cookies.jwt,
         process.env.JWT_SECRET
       );
-
       const currentUser = await User.findById(decoded.id);
-
       console.log(currentUser.name);
       req.user = currentUser;
       res.locals.user = currentUser;
@@ -69,10 +65,4 @@ exports.protect = async (req, res, next) => {
   } else {
     res.send({ status: "failed" });
   }
-};
-
-exports.heatmap = async (req, res, next) => {
-  const { user } = req;
-  console.log(user.name);
-  res.send({ status: "success" });
 };
