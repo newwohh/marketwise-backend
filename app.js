@@ -1,4 +1,3 @@
-const mongoose = require("mongoose");
 const express = require("express");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
@@ -17,6 +16,11 @@ app.use(mongoSanitize());
 // data sanitization against cross side scripting
 app.use(xss());
 
+// Routes
+app.use("/api/v1/users/", userRouter);
+app.use("/api/v1/blogs/", blogRouter);
+
+// Cross side scripting middleware
 app.use(function (req, res, next) {
   console.log(req.cookies.jwt);
   res.header("Access-Control-Allow-Credentials", true);
@@ -32,21 +36,5 @@ app.use(function (req, res, next) {
 
   next();
 });
-
-const DB = process.env.DATABASE.replace(
-  "<PASSWORD>",
-  process.env.DATABASE_PASSWORD
-);
-app.use("/api/v1/users/", userRouter);
-app.use("/api/v1/blogs/", blogRouter);
-
-mongoose
-  .connect(DB, {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useFindAndModify: false,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log("DB SUCCESS"));
 
 module.exports = app;
