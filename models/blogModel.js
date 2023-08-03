@@ -9,14 +9,14 @@ const blogSchema = new mongoose.Schema({
     type: String,
     required: [true, "Cannot upload without a title"],
   },
-  //   createdAt: {
-  //     type: Date,
-  //     default: Date.now,
-  //   },
-  //   user: {
-  //     type: Number,
-  //     required: [true, "User undefined"],
-  //   },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  user: {
+    type: Number,
+    required: [true, "User undefined"],
+  },
 });
 
 const Blogs = mongoose.model("Blog", blogSchema);

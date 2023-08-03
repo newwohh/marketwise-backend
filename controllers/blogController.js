@@ -5,8 +5,8 @@ exports.createBlog = catchAsync(async (req, res, next) => {
   const data = await Blogs.create({
     title: req.body.title,
     description: req.body.description,
-    // createdAt: Date.now(),
-    // user: 99999999999,
+    createdAt: Date.now(),
+    user: 99999999999,
   });
 
   console.log(data);

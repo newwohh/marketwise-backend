@@ -28,6 +28,10 @@ const userSchema = new mongoose.Schema({
     default: true,
     select: false,
   },
+  subscriptions: {
+    type: String,
+    required: false,
+  },
 });
 
 userSchema.methods.correctPassword = async function (
