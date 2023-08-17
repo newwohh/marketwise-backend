@@ -63,3 +63,20 @@ exports.getSubscription = catchAsync(async (req, res, next) => {
 
   next();
 });
+
+exports.deleteSubscription = catchAsync(async (req, res, next) => {
+  let subId = req.params.id;
+
+  const doc = await Blogs.findByIdAndDelete(subId);
+
+  if (!doc) {
+    return res.status(404).json({ message: "Subscription not found" });
+  }
+
+  res.status(204).json({
+    status: "success",
+    data: null,
+  });
+
+  next();
+});
