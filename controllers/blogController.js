@@ -104,7 +104,9 @@ exports.updateBlog = catchAsync(async (req, res, next) => {
   });
 
   if (!doc) {
-    return res.status(404).json({ message: "Blog not found" });
+    return res
+      .status(404)
+      .json({ status: "failed", message: "Blog not found" });
   }
 
   res.status(200).json({ message: "success", updatedBlog: doc });
@@ -120,7 +122,9 @@ exports.deleteBlog = catchAsync(async (req, res, next) => {
   console.log(doc);
 
   if (!doc) {
-    return res.status(404).json({ message: "Blog not found" });
+    return res
+      .status(404)
+      .json({ status: "failed", message: "Blog not found" });
   }
 
   res.status(204).json({
