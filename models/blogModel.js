@@ -14,7 +14,7 @@ const blogSchema = new mongoose.Schema({
     default: Date.now,
   },
   user: {
-    type: Number,
+    type: mongoose.Schema.ObjectId,
     required: [true, "User undefined"],
   },
 });
