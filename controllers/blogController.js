@@ -15,17 +15,21 @@ exports.createBlog = catchAsync(async (req, res, next) => {
 
   if (data) {
     if (!data.title || !data.description) {
-      return res.status(404).json({
+      res.status(404).json({
         status: "failed",
         message: "Sorry please provide data",
       });
+
+      return next();
     }
 
     if (!user) {
-      return res.status(404).json({
+      res.status(404).json({
         status: "failed",
         message: "User not found! please login",
       });
+
+      return next();
     }
 
     console.log(user);
@@ -35,10 +39,12 @@ exports.createBlog = catchAsync(async (req, res, next) => {
       data.title === "" ||
       data.description == ""
     ) {
-      return res.status(404).json({
+      res.status(404).json({
         status: "failed",
         message: "Sorry title and description cannot be empty",
       });
+
+      return next();
     }
     const newBlog = await Blogs.create(data);
 
@@ -53,6 +59,7 @@ exports.createBlog = catchAsync(async (req, res, next) => {
         message: "Sorry invalid data",
       });
     }
+    next();
   }
 
   next();
@@ -84,10 +91,11 @@ exports.updateBlog = catchAsync(async (req, res, next) => {
   let user = await User.findById(req.body.user);
 
   if (!user) {
-    return res.status(404).json({
+    res.status(404).json({
       status: "failed",
       message: "User not found! please login",
     });
+    return next();
   }
 
   if (req.body.title) {
@@ -104,9 +112,8 @@ exports.updateBlog = catchAsync(async (req, res, next) => {
   });
 
   if (!doc) {
-    return res
-      .status(404)
-      .json({ status: "failed", message: "Blog not found" });
+    res.status(404).json({ status: "failed", message: "Blog not found" });
+    return next();
   }
 
   res.status(200).json({ message: "success", updatedBlog: doc });
@@ -122,9 +129,8 @@ exports.deleteBlog = catchAsync(async (req, res, next) => {
   console.log(doc);
 
   if (!doc) {
-    return res
-      .status(404)
-      .json({ status: "failed", message: "Blog not found" });
+    res.status(404).json({ status: "failed", message: "Blog not found" });
+    return next();
   }
 
   res.status(204).json({
