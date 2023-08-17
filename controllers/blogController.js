@@ -112,20 +112,19 @@ exports.updateBlog = catchAsync(async (req, res, next) => {
   next();
 });
 
-exports.deleteBlog -
-  catchAsync(async (req, res, next) => {
-    let blogId = req.params.id;
+exports.deleteBlog = catchAsync(async (req, res, next) => {
+  let blogId = req.params.id;
 
-    const doc = await Blogs.findByIdAndDelete(blogId);
+  const doc = await Blogs.findByIdAndDelete(blogId);
 
-    if (!doc) {
-      return res.status(404).json({ message: "Blog not found" });
-    }
+  if (!doc) {
+    return res.status(404).json({ message: "Blog not found" });
+  }
 
-    res.status(204).json({
-      status: "success",
-      data: null,
-    });
-
-    next();
+  res.status(204).json({
+    status: "success",
+    data: null,
   });
+
+  next();
+});
