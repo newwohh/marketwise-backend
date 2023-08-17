@@ -117,6 +117,8 @@ exports.deleteBlog = catchAsync(async (req, res, next) => {
 
   const doc = await Blogs.findByIdAndDelete(blogId);
 
+  console.log(doc);
+
   if (!doc) {
     return res.status(404).json({ message: "Blog not found" });
   }
