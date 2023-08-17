@@ -9,6 +9,10 @@ const subscriptionSchema = new mongoose.Schema({
     type: String,
     required: [true, "select a ticker"],
   },
+  price: {
+    type: Number,
+    required: [false],
+  },
   user: {
     type: mongoose.Schema.ObjectId,
     required: [true, "not logged in"],

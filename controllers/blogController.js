@@ -10,17 +10,23 @@ exports.createBlog = catchAsync(async (req, res, next) => {
     user: req.body.user,
   };
 
+  let user = await User.findById(data.user);
   console.log(data);
 
   if (data) {
     if (!data.title || !data.description) {
       return res.status(404).json({
         status: "failed",
-        message: "sorry please provide data",
+        message: "Sorry please provide data",
       });
     }
 
-    let user = await User.findById(data.user);
+    if (!user) {
+      return res.status(404).json({
+        status: "failed",
+        message: "User not found! please login",
+      });
+    }
 
     console.log(user);
     if (
@@ -31,7 +37,7 @@ exports.createBlog = catchAsync(async (req, res, next) => {
     ) {
       return res.status(404).json({
         status: "failed",
-        message: "sorry title and description cannot be empty",
+        message: "Sorry title and description cannot be empty",
       });
     }
     const newBlog = await Blogs.create(data);
@@ -44,7 +50,7 @@ exports.createBlog = catchAsync(async (req, res, next) => {
     if (!data) {
       return res.status(404).json({
         status: "failed",
-        message: "sorry invalid data",
+        message: "Sorry invalid data",
       });
     }
   }
