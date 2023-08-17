@@ -20,6 +20,14 @@ exports.createSubscription = catchAsync(async (req, res, next) => {
       });
     }
 
+    if (
+      data.price === undefined ||
+      !data.price ||
+      typeof data.price === String
+    ) {
+      data.price = 0;
+    }
+
     if (!user) {
       return res.status(404).json({
         status: "failed",

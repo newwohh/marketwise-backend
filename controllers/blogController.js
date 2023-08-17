@@ -75,3 +75,37 @@ exports.getAllBlogs = catchAsync(async (req, res, next) => {
 
   next();
 });
+
+exports.updateBlog = catchAsync(async (req, res, next) => {
+  let blogId = req.params.id;
+
+  const updatedFields = {};
+
+  let user = await User.findById(req.body.user);
+
+  if (!user) {
+    return res.status(404).json({
+      status: "failed",
+      message: "User not found! please login",
+    });
+  }
+
+  if (req.body.title) {
+    updatedFields.title = req.body.title;
+  }
+
+  if (req.body.description) {
+    updatedFields.description = req.body.description;
+  }
+
+  const doc = await Blogs.findByIdAndUpdate(blogId, updatedFields, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!doc) {
+    return res.status(404).json({ message: "Blog not found" });
+  }
+
+  res.status(200).json({ message: "success", updatedBlog: doc });
+});
