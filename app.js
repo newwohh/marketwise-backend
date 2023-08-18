@@ -7,6 +7,7 @@ const userRouter = require("./routes/userRoutes");
 const blogRouter = require("./routes/blogRoutes");
 const subscriptionRouter = require("./routes/subscriptionRoute");
 const planRouter = require("./routes/planRoutes");
+const heatmapRouter = require("./routes/heatmapRoutes");
 const app = express();
 app.use(cookieParser());
 dotenv.config({ path: "./config/config.env" });
@@ -39,5 +40,6 @@ app.use("/api/v1/users/", userRouter);
 app.use("/api/v1/blogs/", blogRouter);
 app.use("/api/v1/subscrptions/", subscriptionRouter);
 app.use("/api/v1/plans/", planRouter);
+app.use("/api/v1/", heatmapRouter);
 
 module.exports = app;

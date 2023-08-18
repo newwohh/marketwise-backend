@@ -2,7 +2,10 @@ const Blogs = require("../models/blogModel");
 const User = require("../models/userModel");
 const catchAsync = require("../utils/catchAsync");
 
-// @create Creates a new blog
+// @task Creates a new blog
+// @route POST api/blogs/newblog
+// @desc Creates a new blog with title and desciption
+// @access Only has access to Standard and Premium users
 
 exports.createBlog = catchAsync(async (req, res, next) => {
   const data = {
@@ -67,6 +70,11 @@ exports.createBlog = catchAsync(async (req, res, next) => {
   next();
 });
 
+// @task Get all blogs
+// @route GET api/blogs
+// @desc Gets all blogs for blog page when the page load
+// @access Access for all users
+
 exports.getAllBlogs = catchAsync(async (req, res, next) => {
   const allBlogs = await Blogs.find();
 
@@ -84,6 +92,11 @@ exports.getAllBlogs = catchAsync(async (req, res, next) => {
 
   next();
 });
+
+// @task Update blog
+// @route PATCH api/blogs/newblog
+// @desc Update a new blog with new title and desciption
+// @access Only has access to Standard and Premium users
 
 exports.updateBlog = catchAsync(async (req, res, next) => {
   let blogId = req.params.id;
@@ -122,6 +135,11 @@ exports.updateBlog = catchAsync(async (req, res, next) => {
 
   next();
 });
+
+// @task Deletes a blog
+// @route DELETE api/blogs/newblog
+// @desc Delete a blog that cannot be undo
+// @access Only has access to Standard and Premium users
 
 exports.deleteBlog = catchAsync(async (req, res, next) => {
   let blogId = req.params.id;

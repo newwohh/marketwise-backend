@@ -2,6 +2,11 @@ const catchAsync = require("../utils/catchAsync");
 const Subscription = require("../models/subscriptionModel");
 const User = require("../models/userModel");
 
+// @task Subscribe to any ticker/coin/currency
+// @route POST api/subscriptions/newsubscription
+// @desc Subscribe to get the updates and all info on the subscribed element
+// @access Access only for Standard and premium
+
 exports.createSubscription = catchAsync(async (req, res, next) => {
   const data = {
     name: req.body.name,
@@ -19,14 +24,6 @@ exports.createSubscription = catchAsync(async (req, res, next) => {
         message: "sorry please provide data",
       });
     }
-
-    // if (
-    //   data.price === undefined ||
-    //   !data.price ||
-    //   typeof data.price === String
-    // ) {
-    //   data.price = 0;
-    // }
 
     if (!user) {
       return res.status(404).json({
@@ -51,10 +48,14 @@ exports.createSubscription = catchAsync(async (req, res, next) => {
   next();
 });
 
+// @task Check subscription
+// @route GET api/subscriptions/getsubscription/:id
+// @desc Get all subscribed tickers
+// @access Access only for Standard and premium
+
 exports.getSubscription = catchAsync(async (req, res, next) => {
   const data = await Subscription.find({ user: req.params.id });
   //   console.log(req.params);
-  const doc = await data;
 
   res.status(200).json({
     status: "success",
@@ -63,6 +64,11 @@ exports.getSubscription = catchAsync(async (req, res, next) => {
 
   next();
 });
+
+// @task Delete subscription
+// @route DELETE api/subscriptions/getsubscription/:id
+// @desc Delete all subscribed tickers
+// @access Access only for Standard and premium
 
 exports.deleteSubscription = catchAsync(async (req, res, next) => {
   let subId = req.params.id;

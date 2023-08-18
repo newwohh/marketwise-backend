@@ -2,6 +2,10 @@ const User = require("../models/userModel");
 const catchAsync = require("../utils/catchAsync");
 const { verifyData, createPayment } = require("./paymentController");
 
+// @task Creates plan
+// @route POST api/plans/chooseplan
+// @desc Buy a plan to unlock the features
+
 exports.createPlan = catchAsync(async (req, res, next) => {
   let document = { name: req.body._planname, user: req.body._user };
   let user = await User.findById(document.user);
@@ -24,6 +28,10 @@ exports.createPlan = catchAsync(async (req, res, next) => {
     });
   }
 });
+
+// @task Verify payment
+// @route POST api/plans/verifypayment
+// @desc Check the data for checkout sessions
 
 exports.verifyPayment = catchAsync(async (req, res, next) => {
   verifyData(req, res);
