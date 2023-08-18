@@ -6,6 +6,7 @@ const mongoSanitize = require("express-mongo-sanitize");
 const userRouter = require("./routes/userRoutes");
 const blogRouter = require("./routes/blogRoutes");
 const subscriptionRouter = require("./routes/subscriptionRoute");
+const planRouter = require("./routes/planRoutes");
 const app = express();
 app.use(cookieParser());
 dotenv.config({ path: "./config/config.env" });
@@ -37,5 +38,6 @@ app.use(function (req, res, next) {
 app.use("/api/v1/users/", userRouter);
 app.use("/api/v1/blogs/", blogRouter);
 app.use("/api/v1/subscrptions/", subscriptionRouter);
+app.use("/api/v1/plans/", planRouter);
 
 module.exports = app;
