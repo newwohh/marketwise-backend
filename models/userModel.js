@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema({
     default: true,
     select: false,
   },
-  subscriptions: {
+  plan: {
     type: String,
     required: false,
   },

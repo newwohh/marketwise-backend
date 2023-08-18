@@ -1,25 +1,30 @@
 const Razorpay = require("razorpay");
 const crypto = require("crypto");
 const catchAsync = require("../utils/catchAsync");
+const Plan = require("../models/planModel");
 
-exports.createPlan = catchAsync(async (req, res, next, data) => {
+exports.createPayment = catchAsync(async (req, res, next, data) => {
+  let userData = { name: req.body._planname, user: req.body._user };
+
   const instance = new Razorpay({
     key_id: process.env.RAZRPAY_ID,
     key_secret: process.env.RAZRPAY_SECRET,
   });
 
+  const amount = req.body.amount;
   const options = {
-    amount: 100,
-    currency: "INR",
+    amount: amount,
+    currency: "USD",
     receipt: crypto.randomBytes(10).toString("hex"),
   };
 
-  instance.orders.create(options, (error, order) => {
+  instance.orders.create(options, async (error, order) => {
     if (error) {
-      console.log(error);
       return res.status(500).json({ status: "failed" });
     } else {
-      res.status(200).json({ data: order });
+      const doc = await Plan.create(userData);
+      res.status(200).json({ status: "success", data: order, doc });
+      return true;
     }
   });
 });
