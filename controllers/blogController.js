@@ -2,6 +2,8 @@ const Blogs = require("../models/blogModel");
 const User = require("../models/userModel");
 const catchAsync = require("../utils/catchAsync");
 
+// @create Creates a new blog
+
 exports.createBlog = catchAsync(async (req, res, next) => {
   const data = {
     title: req.body.title,
