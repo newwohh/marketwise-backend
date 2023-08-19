@@ -11,17 +11,12 @@ exports.handlerFactory = (status, statusCode, message, res, data) => {
       ).failedReturn();
       break;
     case 401:
-      new HandleResponse(
-        status,
-        401,
-        "Sorry no user found",
-        res
-      ).failedReturn();
+      new HandleResponse(status, 401, message, res).failedReturn();
       break;
     case 404:
       new HandleResponse(
         status,
-        400,
+        404,
         "Sorry requested data not found",
         res
       ).failedReturn();

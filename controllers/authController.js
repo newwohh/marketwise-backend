@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const { promisify } = require("util");
 const User = require("../models/userModel");
 const catchAsync = require("../utils/catchAsync");
+const { handlerFactory } = require("./errorHandler");
 
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -9,7 +10,7 @@ const signToken = (id) => {
   });
 };
 
-const createSendToken = (user, statusCode, req, res) => {
+const createSendToken = async (user, statusCode, req, res) => {
   const token = signToken(user._id);
 
   res.cookie("jwt", token, {
@@ -31,13 +32,36 @@ const createSendToken = (user, statusCode, req, res) => {
 };
 
 exports.signup = catchAsync(async (req, res, next) => {
-  const newUser = await User.create({
+  const newUser = {
     name: req.body.name,
     email: req.body.email,
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm,
+  };
+
+  if (!newUser.name || !newUser.email || !newUser.password) {
+    return handlerFactory("failed", 400, "Sorry bad request", res);
+  }
+
+  const existingUserEmail = await User.findOne({ email: newUser.email });
+  const existingUserPassword = await User.findOne({
+    password: newUser.password,
   });
-  createSendToken(newUser, 201, req, res);
+
+  if (!existingUserEmail || !existingUserPassword) {
+    let user = await User.create(newUser);
+    return createSendToken(user, 201, req, res);
+  } else {
+    handlerFactory(
+      "failed",
+      401,
+      "Users already exists with same email or password",
+      res
+    );
+    return next();
+  }
+
+  next();
 });
 
 exports.login = catchAsync(async (req, res, next) => {
