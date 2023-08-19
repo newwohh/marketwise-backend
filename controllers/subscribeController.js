@@ -25,6 +25,8 @@ exports.createSubscription = catchAsync(async (req, res, next) => {
       });
     }
 
+    console.log(user);
+
     if (!user) {
       return res.status(404).json({
         status: "failed",

@@ -35,3 +35,5 @@ exports.handlerFactory = (status, statusCode, message, res, data) => {
       break;
   }
 };
+
+exports.errorControlker = (err) => {};

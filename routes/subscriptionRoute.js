@@ -1,9 +1,11 @@
 const express = require("express");
 
-const authController = require("../controllers/authController");
 const subscriptionController = require("../controllers/subscribeController");
+const { protect } = require("../middlewares/middlewares");
 
 const subscriptionRouter = express.Router();
+
+subscriptionRouter.use(protect);
 
 subscriptionRouter.post(
   "/newsubscription",

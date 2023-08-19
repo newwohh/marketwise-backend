@@ -42,4 +42,10 @@ app.use("/api/v1/subscrptions/", subscriptionRouter);
 app.use("/api/v1/plans/", planRouter);
 app.use("/api/v1/", heatmapRouter);
 
+app.use((err, req, res, next) => {
+  const status = err.status || 500;
+  const message = err.message || "Internal Server Error";
+  res.status(status).json({ status: "error", message });
+});
+
 module.exports = app;

@@ -1,7 +1,7 @@
 const Blogs = require("../models/blogModel");
 const User = require("../models/userModel");
 const catchAsync = require("../utils/catchAsync");
-const { handlerFactory } = require("./errorHandler");
+const { handlerFactory } = require("./sendResponseController");
 
 // @task Creates a new blog
 // @route POST api/blogs/newblog
@@ -54,7 +54,7 @@ exports.createBlog = catchAsync(async (req, res, next) => {
     return next();
   }
 
-  next();
+  next(handlerFactory("failed", 400, "Sorry cannot POST", res));
 });
 
 // @task Get all blogs
