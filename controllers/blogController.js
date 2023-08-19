@@ -1,6 +1,7 @@
 const Blogs = require("../models/blogModel");
 const User = require("../models/userModel");
 const catchAsync = require("../utils/catchAsync");
+const { errorHandler } = require("./errorHandler");
 
 // @task Creates a new blog
 // @route POST api/blogs/newblog
@@ -20,20 +21,12 @@ exports.createBlog = catchAsync(async (req, res, next) => {
 
   if (data) {
     if (!data.title || !data.description) {
-      res.status(404).json({
-        status: "failed",
-        message: "Sorry please provide data",
-      });
-
+      errorHandler("failed", 400, "Sorry please provide data", res);
       return next();
     }
 
     if (!user) {
-      res.status(404).json({
-        status: "failed",
-        message: "User not found! please login",
-      });
-
+      errorHandler("failed", 401, "Sorry no user found", res);
       return next();
     }
 
@@ -44,10 +37,12 @@ exports.createBlog = catchAsync(async (req, res, next) => {
       data.title === "" ||
       data.description == ""
     ) {
-      res.status(404).json({
-        status: "failed",
-        message: "Sorry title and description cannot be empty",
-      });
+      errorHandler(
+        "failed",
+        400,
+        "Sorry title and description cannot be empty",
+        res
+      );
 
       return next();
     }
@@ -57,14 +52,9 @@ exports.createBlog = catchAsync(async (req, res, next) => {
       status: "success",
       data: newBlog,
     });
-  } else {
-    if (!data) {
-      return res.status(404).json({
-        status: "failed",
-        message: "Sorry invalid data",
-      });
-    }
-    next();
+  } else if (!data) {
+    errorHandler("failed", 400, "Sorry cannot POST", res);
+    return next();
   }
 
   next();
@@ -79,10 +69,7 @@ exports.getAllBlogs = catchAsync(async (req, res, next) => {
   const allBlogs = await Blogs.find();
 
   if (!allBlogs) {
-    res.status(404).json({
-      status: "failed",
-      message: "Sorry nothing found",
-    });
+    errorHandler("failed", 400, "Sorry no blogs were found", res);
   }
 
   res.status(200).json({
@@ -106,7 +93,7 @@ exports.updateBlog = catchAsync(async (req, res, next) => {
   let user = await User.findById(req.body.user);
 
   if (!user) {
-    res.status(404).json({
+    res.status(401).json({
       status: "failed",
       message: "User not found! please login",
     });
