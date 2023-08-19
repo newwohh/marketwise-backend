@@ -1,7 +1,7 @@
 const Blogs = require("../models/blogModel");
 const User = require("../models/userModel");
 const catchAsync = require("../utils/catchAsync");
-const { errorHandler } = require("./errorHandler");
+const { handlerFactory } = require("./errorHandler");
 
 // @task Creates a new blog
 // @route POST api/blogs/newblog
@@ -21,12 +21,12 @@ exports.createBlog = catchAsync(async (req, res, next) => {
 
   if (data) {
     if (!data.title || !data.description) {
-      errorHandler("failed", 400, "Sorry please provide data", res);
+      handlerFactory("failed", 400, "Sorry please provide data", res);
       return next();
     }
 
     if (!user) {
-      errorHandler("failed", 401, "Sorry no user found", res);
+      handlerFactory("failed", 401, "Sorry no user found", res);
       return next();
     }
 
@@ -37,7 +37,7 @@ exports.createBlog = catchAsync(async (req, res, next) => {
       data.title === "" ||
       data.description == ""
     ) {
-      errorHandler(
+      handlerFactory(
         "failed",
         400,
         "Sorry title and description cannot be empty",
@@ -48,12 +48,9 @@ exports.createBlog = catchAsync(async (req, res, next) => {
     }
     const newBlog = await Blogs.create(data);
 
-    res.status(200).json({
-      status: "success",
-      data: newBlog,
-    });
+    handlerFactory("success", 200, "success api", res, newBlog);
   } else if (!data) {
-    errorHandler("failed", 400, "Sorry cannot POST", res);
+    handlerFactory("failed", 400, "Sorry cannot POST", res);
     return next();
   }
 
@@ -72,10 +69,7 @@ exports.getAllBlogs = catchAsync(async (req, res, next) => {
     errorHandler("failed", 400, "Sorry no blogs were found", res);
   }
 
-  res.status(200).json({
-    status: "success",
-    data: allBlogs,
-  });
+  handlerFactory("success", 200, "success api", res, allBlogs);
 
   next();
 });
@@ -118,7 +112,7 @@ exports.updateBlog = catchAsync(async (req, res, next) => {
     return next();
   }
 
-  res.status(200).json({ message: "success", updatedBlog: doc });
+  handlerFactory("success", 200, "success api", res, doc);
 
   next();
 });
@@ -140,10 +134,7 @@ exports.deleteBlog = catchAsync(async (req, res, next) => {
     return next();
   }
 
-  res.status(204).json({
-    status: "success",
-    data: null,
-  });
+  handlerFactory("success", 200, "success api", res, null);
 
   next();
 });
